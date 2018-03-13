@@ -1,4 +1,4 @@
-package com.sap.hana.cloud.samples.springboot.util;
+package com.parking;
 
 import java.io.StringWriter;
 import java.sql.Connection;

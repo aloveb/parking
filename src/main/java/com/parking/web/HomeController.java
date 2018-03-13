@@ -1,6 +1,5 @@
-package com.sap.hana.cloud.samples.springboot.web;
+package com.parking.web;
 
-import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.LinkedHashMap;
@@ -13,10 +12,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.sap.hana.cloud.samples.springboot.util.DBInformation;
+import com.parking.DBInformation;
 
 @Controller
 public class HomeController
@@ -41,6 +39,12 @@ public class HomeController
 		
 		// model.addAttribute("instanceInfo", instanceInfo);
 
+		return "home";
+	}
+
+	@RequestMapping("/person")
+	public String person()
+	{
 		return "home";
 	}
 

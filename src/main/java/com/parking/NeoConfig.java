@@ -1,4 +1,4 @@
-package com.sap.hana.cloud.samples.springboot;
+package com.parking;
 
 import java.sql.SQLException;
 
@@ -11,8 +11,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.datasource.lookup.JndiDataSourceLookup;
-
-import com.sap.hana.cloud.samples.springboot.util.DBInformation;
 
 @Configuration
 @Profile({"neo"})
