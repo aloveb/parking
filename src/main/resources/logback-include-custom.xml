@@ -7,5 +7,4 @@
     <logger name="com.sap.hana.cloud.hcp" level="DEBUG"/>
 
     <logger name="com.sap.hana.cloud.samples.springboot" level="DEBUG"/>
-    <logger name="org.thymeleaf" level="WARN" />
 </included>
