@@ -10,6 +10,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;   //用户ID
 
+    private String openId; //微信用户OpenID
+
     private String userName; //用户昵称
 
     private String cardID;   //一卡通ID
@@ -46,5 +48,13 @@ public class User {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
     }
 }

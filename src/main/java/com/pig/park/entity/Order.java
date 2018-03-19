@@ -14,9 +14,9 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;     //订单ID
 
-    private String rentID;    //租主ID
+    private String rentId;    //租主ID
 
-    private String tenantID;  //租户ID
+    private String tenantId;  //租户ID
 
     private String parkArea;  //停车位区域
 
@@ -40,22 +40,6 @@ public class Order {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public String getRentID() {
-        return rentID;
-    }
-
-    public void setRentID(String rentID) {
-        this.rentID = rentID;
-    }
-
-    public String getTenantID() {
-        return tenantID;
-    }
-
-    public void setTenantID(String tenantID) {
-        this.tenantID = tenantID;
     }
 
     public String getParkArea() {
@@ -120,5 +104,21 @@ public class Order {
 
     public void setOrderState(int orderState) {
         this.orderState = orderState;
+    }
+
+    public String getRentId() {
+        return rentId;
+    }
+
+    public void setRentId(String rentId) {
+        this.rentId = rentId;
+    }
+
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
     }
 }
