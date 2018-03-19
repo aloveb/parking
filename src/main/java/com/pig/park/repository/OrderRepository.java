@@ -9,8 +9,6 @@ import java.util.Optional;
 @RepositoryRestResource(collectionResourceRel = "order", path = "order")
 public interface OrderRepository extends PagingAndSortingRepository<Order, Long> {
 
-    Optional<Order> findById(Long Id);
-
     Iterable<Order> findAllByRentId(int rentId);
 
     Iterable<Order> findAllByOrderState(int orderState);

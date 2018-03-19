@@ -9,7 +9,5 @@ import java.util.Optional;
 @RepositoryRestResource(collectionResourceRel = "user", path = "user")
 public interface UserRepository extends PagingAndSortingRepository<User, Long> {
 
-    Optional<User> findById(Long Id);
-
     User findByOpenId(String openId);
 }
