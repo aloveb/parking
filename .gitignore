@@ -19,3 +19,11 @@ hs_err_pid*
 /derby.log
 /.idea/
 */.DS_Store
+parking.iml
+src/main/main.iml
+parking.iml
+parking.iml
+.idea/misc.xml
+.idea/uiDesigner.xml
+.idea/vcs.xml
+.idea/workspace.xml

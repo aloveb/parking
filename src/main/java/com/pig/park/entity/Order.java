@@ -1,12 +1,13 @@
 package com.pig.park.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javafx.beans.DefaultProperty;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.util.Date;
 
 @Entity
+@Table( name="P_order" )
 public class Order {
 
     @Id
@@ -23,7 +24,7 @@ public class Order {
 
     private String parkNum;   //停车位号码
 
-    private int price;        //订单花费
+    private int price = 0;        //订单花费
 
     private Date releaseDate; //租主发布的日期
 
@@ -31,7 +32,7 @@ public class Order {
 
     private Date orderDate;  //车位使用的日期
 
-    private int orderState; //0,1,2,3分别为过期，发布中，租借中，完成
+    private int orderState = 1; //0,1,2,3分别为过期，发布中，租借中，完成
 
     public long getId() {
         return id;
