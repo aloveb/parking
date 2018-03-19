@@ -11,8 +11,8 @@ import java.util.Date;
 public class Order {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;     //订单ID
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long id;     //订单ID
 
     private String rentID;    //租主ID
 

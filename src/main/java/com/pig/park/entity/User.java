@@ -7,23 +7,14 @@ import javax.persistence.*;
 @Table( name="P_user" )
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private String id;   //用户ID
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long id;   //用户ID
 
     private String userName; //用户昵称
 
     private String cardID;   //一卡通ID
 
     private String plateNum; //车牌号
-
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getUserName() {
         return userName;
@@ -47,5 +38,13 @@ public class User {
 
     public void setPlateNum(String plateNum) {
         this.plateNum = plateNum;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }
