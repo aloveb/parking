@@ -1,5 +1,6 @@
-# cloud-spring-boot-sample
+# parking
 
+base on cloud-spring-boot-sample:
 Sample application demoing Spring Boot running on SAP HANA Cloud Platform.
 
 **work in progress**
@@ -48,6 +49,8 @@ For more information on SemVer, please visit http://semver.org/
 
 Authors
 -------
+
+**Lucia Wu**
 
 **Matthias Steiner**
 
