@@ -34,14 +34,6 @@ public class Order {
 
     private int orderState = 1; //0,1,2,3分别为过期，发布中，租借中，完成
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
     public String getParkArea() {
         return parkArea;
     }
@@ -120,5 +112,13 @@ public class Order {
 
     public void setTenantId(String tenantId) {
         this.tenantId = tenantId;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }
