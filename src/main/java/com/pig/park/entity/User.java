@@ -1,23 +1,30 @@
 package com.pig.park.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 
 @Entity
 public class User {
     @Id
-    private String userId;   //用户ID
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private String id;   //用户ID
+
     private String userName; //用户昵称
-    private String cardId;   //一卡通ID
+
+    private String cardID;   //一卡通ID
+
     private String plateNum; //车牌号
 
-    public String getUserId() {
-        return userId;
+
+    public String getId() {
+        return id;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getUserName() {
@@ -28,12 +35,12 @@ public class User {
         this.userName = userName;
     }
 
-    public String getCardId() {
-        return cardId;
+    public String getCardID() {
+        return cardID;
     }
 
-    public void setCardId(String cardId) {
-        this.cardId = cardId;
+    public void setCardID(String cardID) {
+        this.cardID = cardID;
     }
 
     public String getPlateNum() {
@@ -43,5 +50,4 @@ public class User {
     public void setPlateNum(String plateNum) {
         this.plateNum = plateNum;
     }
-
 }

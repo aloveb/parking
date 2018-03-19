@@ -9,43 +9,52 @@ import java.util.Date;
 @Entity
 public class Order {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long orderId;     //订单ID
-    private String rentId;    //租主ID
-    private String tenantId;  //租户ID
+    private long id;     //订单ID
+
+    private String rentID;    //租主ID
+
+    private String tenantID;  //租户ID
+
     private String parkArea;  //停车位区域
+
     private String parkBuild; //停车位楼号
+
     private String parkNum;   //停车位号码
+
     private int price;        //订单花费
+
     private Date releaseDate; //租主发布的日期
+
     private Date confirmDate; //租户下单的日期
+
     private Date orderDate;  //车位使用的日期
-    private int orderSta; //0,1,2,3分别为过期，发布中，租借中，完成
 
-    public int getOrderSta() {
-        return orderSta;
+    private int orderState; //0,1,2,3分别为过期，发布中，租借中，完成
+
+    public long getId() {
+        return id;
     }
 
-    public void setOrderSta(int orderSta) {
-        this.orderSta = orderSta;
+    public void setId(long id) {
+        this.id = id;
     }
 
-    public String getRentId() {
-        return rentId;
+    public String getRentID() {
+        return rentID;
     }
 
-    public void setRentId(String rentId) {
-        this.rentId = rentId;
+    public void setRentID(String rentID) {
+        this.rentID = rentID;
     }
 
-    public String getTenantId() {
-        return tenantId;
+    public String getTenantID() {
+        return tenantID;
     }
 
-    public void setTenantId(String tenantId) {
-        this.tenantId = tenantId;
+    public void setTenantID(String tenantID) {
+        this.tenantID = tenantID;
     }
 
     public String getParkArea() {
@@ -104,6 +113,11 @@ public class Order {
         this.orderDate = orderDate;
     }
 
+    public int getOrderState() {
+        return orderState;
+    }
 
-
+    public void setOrderState(int orderState) {
+        this.orderState = orderState;
+    }
 }
