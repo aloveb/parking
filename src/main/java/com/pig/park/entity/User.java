@@ -18,6 +18,8 @@ public class User {
 
     private String plateNum; //车牌号
 
+    private int purse;       //用户余额
+
     public String getUserName() {
         return userName;
     }
@@ -56,5 +58,13 @@ public class User {
 
     public void setOpenId(String openId) {
         this.openId = openId;
+    }
+
+    public int getPurse() {
+        return purse;
+    }
+
+    public void setPurse(int purse) {
+        this.purse = purse;
     }
 }
