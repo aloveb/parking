@@ -14,7 +14,7 @@ public class User {
 
     private String userName; //用户昵称
 
-    private String cardID;   //一卡通ID
+    private String cardId;   //一卡通ID
 
     private String plateNum; //车牌号
 
@@ -28,12 +28,12 @@ public class User {
         this.userName = userName;
     }
 
-    public String getCardID() {
-        return cardID;
+    public String getCardId() {
+        return cardId;
     }
 
-    public void setCardID(String cardID) {
-        this.cardID = cardID;
+    public void setCardId(String cardID) {
+        this.cardId = cardID;
     }
 
     public String getPlateNum() {

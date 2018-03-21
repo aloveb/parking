@@ -13,12 +13,10 @@ import java.util.Optional;
 public interface UserRepository extends PagingAndSortingRepository<User, Long> {
 
     User findByOpenId(String openId);
+    User save(User user);
     @Modifying
     @Query(value = "update User u set u.userName=:userName," +
             " u.cardId=:cardId, u.plateNum=:plateNum where u.openId=:openId")
     void editUserByopenId(@Param("openId") String openId, @Param("userName") String userName,
                           @Param("cardId") String cardId, @Param("plateNum") String plateNum);
-
-    @Query(value = "select purse from User where openId=:openId")
-    int findpurseByopenId(@Param("openId") String openId);
 }

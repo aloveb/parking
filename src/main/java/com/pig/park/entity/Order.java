@@ -1,10 +1,7 @@
 package com.pig.park.entity;
 
-import javafx.beans.DefaultProperty;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import java.util.Date;
 
 @Entity
 @Table( name="P_order" )
@@ -12,7 +9,7 @@ public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;     //订单ID
+    private Long orderid;     //订单ID
 
     private String rentId;    //租主ID
 
@@ -24,13 +21,13 @@ public class Order {
 
     private String parkNum;   //停车位号码
 
-    private int price = 0;        //订单花费
+    private int price;        //订单花费
 
-    private Date releaseDate; //租主发布的日期
+    private String releaseDate; //租主发布的日期
 
-    private Date confirmDate; //租户下单的日期
+    private String confirmDate; //租户下单的日期
 
-    private Date orderDate;  //车位使用的日期
+    private String orderDate;  //车位使用的日期
 
     private int orderState = 1; //0,1,2,3分别为过期，发布中，租借中，完成
 
@@ -66,27 +63,27 @@ public class Order {
         this.price = price;
     }
 
-    public Date getReleaseDate() {
+    public String getReleaseDate() {
         return releaseDate;
     }
 
-    public void setReleaseDate(Date releaseDate) {
+    public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
     }
 
-    public Date getConfirmDate() {
+    public String getConfirmDate() {
         return confirmDate;
     }
 
-    public void setConfirmDate(Date confirmDate) {
+    public void setConfirmDate(String confirmDate) {
         this.confirmDate = confirmDate;
     }
 
-    public Date getOrderDate() {
+    public String getOrderDate() {
         return orderDate;
     }
 
-    public void setOrderDate(Date orderDate) {
+    public void setOrderDate(String orderDate) {
         this.orderDate = orderDate;
     }
 
@@ -114,11 +111,11 @@ public class Order {
         this.tenantId = tenantId;
     }
 
-    public Long getId() {
-        return id;
+    public Long getOrderId() {
+        return orderid;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setOrderId(Long orderid) {
+        this.orderid = orderid;
     }
 }
