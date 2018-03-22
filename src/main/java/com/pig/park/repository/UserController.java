@@ -16,9 +16,11 @@ public class UserController {
     @Autowired
     private UserRepository userRepository ;
 
-   @RequestMapping(value = "/regist",method = RequestMethod.POST)
+   @RequestMapping(value = "/regist")
     public boolean userRegist(@RequestParam("openId") String openId, @RequestParam("userName") String userName,
                              @RequestParam("cardId") String cardId, @RequestParam("plateNum") String plateNum){
+        if(null != userRepository.findByOpenId(openId))
+            return false;
         User user = new User();
         user.setOpenId(openId);
         user.setUserName(userName);
