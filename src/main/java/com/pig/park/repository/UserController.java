@@ -16,10 +16,10 @@ public class UserController {
     @Autowired
     private UserRepository userRepository ;
 
-   @RequestMapping(value = "/regist")
+   @RequestMapping(value = "/regist",method = RequestMethod.POST)//添加用户信息
     public boolean userRegist(@RequestParam("openId") String openId, @RequestParam("userName") String userName,
                              @RequestParam("cardId") String cardId, @RequestParam("plateNum") String plateNum){
-        if(null != userRepository.findByOpenId(openId))
+        if(null != userRepository.findByOpenId(openId))//判断数据库内是否已经有该用户
             return false;
         User user = new User();
         user.setOpenId(openId);
@@ -31,13 +31,13 @@ public class UserController {
         return true;
     }
 
-    @RequestMapping(value = "/edituser")
+    @RequestMapping(value = "/edituser",method = RequestMethod.POST)//编辑用户信息
     public boolean editUserByopenId(@RequestParam("openId") String openId,@RequestParam("userName") String userName,@RequestParam("cardId") String cardId,@RequestParam("plateNum") String plateNum){
         userRepository.editUserByopenId(openId,userName,cardId,plateNum);
         return true;
     }
 
-    @RequestMapping(value = "/purse")
+    @RequestMapping(value = "/purse",method = RequestMethod.GET)//获取用户账户内的猪猪币余额
     public int myPurse(@RequestParam("openId") String openId){
         User user = userRepository.findByOpenId(openId);
         return user.getPurse();
