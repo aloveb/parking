@@ -11,12 +11,5 @@ import java.util.Optional;
 
 @RepositoryRestResource(collectionResourceRel = "user", path = "user")
 public interface UserRepository extends PagingAndSortingRepository<User, Long> {
-
     User findByOpenId(String openId);  //通过openid查找用户
-    User save(User user);              //保存一个user实例
-    @Modifying
-    @Query(value = "update User u set u.userName=:userName," +
-            " u.cardId=:cardId, u.plateNum=:plateNum where u.openId=:openId")
-    void editUserByopenId(@Param("openId") String openId, @Param("userName") String userName,
-                          @Param("cardId") String cardId, @Param("plateNum") String plateNum);//更新用户信息
 }

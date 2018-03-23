@@ -11,17 +11,6 @@ import java.util.List;
 
 @RepositoryRestResource(collectionResourceRel = "order", path = "order")
 public interface OrderRepository extends PagingAndSortingRepository<Order, Long> {
-
-    List<Order> findAllByRentIdOrTenantId(String rentId, String tenantId);
-    Iterable<Order> findAll();
-    Order findByParkAreaAndParkBuildAndParkNumAndOrderDate(String parkArea,String parkBuild,String parkNum,String orderDate);
-    Order findById(long id);
-    void CheckOrderisExpire();
-    Order save(Order order);
-    List<Order> findAllByOrderState(int orderState);
-    @Modifying
-    @Query(value = "update Order o set o.parkArea=:parkArea,o.parkBuild=:parkBuild," +
-            " o.parkNum=:parkNum, o.price=:price, o.orderDate=:orderDate where o.id=:id")
-    void editOrderByid(long id, String parkArea,String parkBuild,String parkNum,int price, String orderDate);
-
+    List<Order> findAllByRentIdOrTenantId(String rentId, String tenantId); //通过租户订单或者用户订单查询订单
+    List<Order> findAllByOrderState(int orderState); //查找订单根据状态
 }
