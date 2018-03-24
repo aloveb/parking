@@ -21,10 +21,3 @@ To create a `WAR` file that can be deployed to **SAP HANA Cloud Platform** (Tomc
 To create a `jar` file that can be deployed to **SAP HANA Cloud Platform, Starter Edition for Cloud Foundry Services (Beta)** execute the following command:
 
 ``mvn -P cf clean package install``
-
-
-Authors
--------
-
-**Lucia Wu**
-
