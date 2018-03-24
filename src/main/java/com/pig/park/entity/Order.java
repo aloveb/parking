@@ -1,7 +1,11 @@
 package com.pig.park.entity;
 
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
+import java.util.Date;
+
 
 @Entity
 @Table( name="P_order" )
@@ -23,11 +27,11 @@ public class Order {
 
     private int price;        //订单花费
 
-    private String releaseDate; //租主发布的日期
+    private Date releaseDate; //租主发布的日期
 
-    private String confirmDate; //租户下单的日期
+    private Date confirmDate; //租户下单的日期
 
-    private String orderDate;  //车位使用的日期
+    private Date orderDate;  //车位使用的日期
 
     private int orderState = 1; //0,1,2,3分别为过期，发布中，租借中，完成
 
@@ -63,30 +67,6 @@ public class Order {
         this.price = price;
     }
 
-    public String getReleaseDate() {
-        return releaseDate;
-    }
-
-    public void setReleaseDate(String releaseDate) {
-        this.releaseDate = releaseDate;
-    }
-
-    public String getConfirmDate() {
-        return confirmDate;
-    }
-
-    public void setConfirmDate(String confirmDate) {
-        this.confirmDate = confirmDate;
-    }
-
-    public String getOrderDate() {
-        return orderDate;
-    }
-
-    public void setOrderDate(String orderDate) {
-        this.orderDate = orderDate;
-    }
-
     public int getOrderState() {
         return orderState;
     }
@@ -117,5 +97,29 @@ public class Order {
 
     public void setOrderId(Long orderid) {
         this.orderid = orderid;
+    }
+
+    public Date getReleaseDate() {
+        return releaseDate;
+    }
+
+    public void setReleaseDate(Date releaseDate) {
+        this.releaseDate = releaseDate;
+    }
+
+    public Date getConfirmDate() {
+        return confirmDate;
+    }
+
+    public void setConfirmDate(Date confirmDate) {
+        this.confirmDate = confirmDate;
+    }
+
+    public Date getOrderDate() {
+        return orderDate;
+    }
+
+    public void setOrderDate(Date orderDate) {
+        this.orderDate = orderDate;
     }
 }
