@@ -1,6 +1,5 @@
 package com.pig.park.controller;
 
-import com.pig.park.entity.Order;
 import com.pig.park.entity.User;
 import com.pig.park.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,15 +16,12 @@ public class UserController {
     /**
      * 注册用户，条件是判断用户是否存在
      * @param user 用户注册的信息
-     * @return true：用户注册成功， false：用户注册失败
+     * @return  如果用户注册成功则返回用户信息， null则用户注册失败
      */
    @RequestMapping(value = "/register",method = RequestMethod.POST)
-    public @ResponseBody boolean userRegister(@RequestBody User user){
-        if(null != userRepository.findByOpenId(user.getOpenId()))//判断数据库内是否已经有该用户
-            return false;
+    public @ResponseBody User userRegister(@RequestBody User user){
         user.setPurse(150);
-        userRepository.save(user);
-        return true;
+        return userRepository.save(user);
     }
 
     /**
@@ -33,20 +29,34 @@ public class UserController {
      * @param openId 微信的OpenID
      * @return 如果用户存在则直接返回用户，否则为null
      */
-    @RequestMapping(value = "/checkUser",method = RequestMethod.GET)//根据ID检查用户是否存
+    @RequestMapping(value = "/checkuser",method = RequestMethod.GET)//根据ID检查用户是否存在
     public @ResponseBody User checkUser(@RequestParam("openId") String openId){
         User user = userRepository.findByOpenId(openId);
         return user;
     }
 
     /**
-     * 根据微信ID获取用户的钱币
-     * @param openId 微信ID
+     * 根据用户ID获取用户的钱币
+     * @param id 用户ID
      * @return 用户如果存在则是钱币，不存在则返回-1
      */
     @RequestMapping(value = "/purse",method = RequestMethod.GET)//获取用户账户内的猪猪币余额
-    public @ResponseBody int myPurse(@RequestParam("openId") String openId){
-        User user = userRepository.findByOpenId(openId);
+    public @ResponseBody int myPurse(@RequestParam("id")long id){
+        User user = userRepository.findByid(id);
         return user == null ? -1 : user.getPurse();
+    }
+
+    /**
+     * 更新订单
+     * @param user 需要更新用户的信息
+     * @return 修改后返回修改后的user信息
+     */
+    @RequestMapping(value = "/edit",method = RequestMethod.PUT)//修改订单
+    public @ResponseBody User editOrder(@RequestBody User user) {
+        User newuser = userRepository.findByid(user.getId());
+        newuser.setUserName(user.getUserName());
+        newuser.setCardId(user.getCardId());
+        newuser.setPlateNum(user.getPlateNum());
+        return userRepository.save(newuser);
     }
 }

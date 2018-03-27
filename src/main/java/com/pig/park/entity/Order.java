@@ -12,8 +12,8 @@ import java.util.Date;
 public class Order {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long orderid;     //订单ID
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long orderId;     //订单ID
 
     private String rentId;    //租主ID
 
@@ -33,7 +33,7 @@ public class Order {
 
     private Date orderDate;  //车位使用的日期
 
-    private int orderState = 1; //0,1,2,3分别为过期，发布中，租借中，完成
+    private int orderState; //0,1,2,3分别为过期，发布中，租借中，完成
 
     public String getParkArea() {
         return parkArea;
@@ -92,11 +92,11 @@ public class Order {
     }
 
     public Long getOrderId() {
-        return orderid;
+        return orderId;
     }
 
-    public void setOrderId(Long orderid) {
-        this.orderid = orderid;
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
     }
 
     public Date getReleaseDate() {

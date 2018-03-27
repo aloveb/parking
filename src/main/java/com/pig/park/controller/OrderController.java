@@ -2,13 +2,9 @@ package com.pig.park.controller;
 
 import com.pig.park.entity.Order;
 import com.pig.park.repository.OrderRepository;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -25,8 +21,8 @@ public class OrderController {
      * @param uid User 的 ID
      * @return 所有满足条件的订单
      */
-    @RequestMapping(value = "/getOrderListByUser",method = RequestMethod.GET)//根据用户ID查询用户的订单
-    public @ResponseBody List<Order> getOrderListByUserId(@RequestParam("id") String uid) {
+    @RequestMapping(value = "/getOrderList",method = RequestMethod.GET)//根据用户ID查询用户的订单
+    public @ResponseBody List<Order> getOrderList(@RequestParam("id") String uid) {
         return orderRepository.findAllByRentIdOrTenantId(uid, uid);
     }
 
@@ -47,46 +43,59 @@ public class OrderController {
      * @param order 需要更新订单的信息
      * @return 修改状态 true修改成功
      */
-    @RequestMapping(value = "/edit",method = RequestMethod.PUT)//修改订单
-    public @ResponseBody boolean editOrder(@RequestBody Order order) {
+    @RequestMapping(value = "/edit",method = RequestMethod.PATCH)//修改订单
+    public @ResponseBody Order editOrder(@RequestBody Order order) {
         if(order.getOrderId() == null) {
-            return false;
+            return null;
         }
         if(1 != (orderRepository.findById(order.getOrderId()).get().getOrderState())){ //检查订单状态是否非发布中，若不是发布中则拒绝修改
-            return false;
+            return null;
         }
 
-        orderRepository.save(order);
-        return true;
-
+        return orderRepository.save(order);
     }
 
-    //TODO 后面需要继续增强，比如返回具体的消息格式
-    @RequestMapping(value = "/cancelOrder",method = RequestMethod.POST)//取消订单
-    public @ResponseBody boolean deleteOrderById(@RequestParam("id") long id){
-        Order order = orderRepository.findById(id).get();
+
+    /**
+     * 取消订单
+     * @param orderId 待取消的订单ID
+     * @return 检查订单状态 若订单处于发布中便可以取消 true修改成功 false表示修改失败
+     */
+    @RequestMapping(value = "/cancelOrder",method = RequestMethod.PATCH)//取消订单
+    public @ResponseBody Order deleteOrderById(@RequestParam("orderId") long orderId){
+        Order order = orderRepository.findByOrderId(orderId);
         if(1 != order.getOrderState()){//检查订单状态是否非发布中，若不是发布中则拒绝修改
-            return false;
+            return null;
         }
         order.setOrderState(0);
-        return true;
+        return orderRepository.save(order);
     }
 
-//    @RequestMapping(value = "/grabOrder",method = RequestMethod.POST)//抢订单
-//    public @ResponseBody boolean grabOrder(@RequestParam("id") long id, @RequestParam("tenantId") String tenantId,
-//                            @RequestParam("confirmDate") String confirmDate){
-//        Order order = orderRepository.findById(id).get();
-//        if (1 != order.getOrderState())//检查订单状态是否非发布中，若不是发布中则拒绝修改
-//            return false;
-//        order.setTenantId(tenantId);
-//        order.setConfirmDate(confirmDate);
-//        order.setOrderState(2);
-//        return true;
-//    }
+    /**
+     * 抢车位
+     * @param orderId 待取消的订单ID
+     * @param tenantId 抢车位的用户ID
+     * @return 检查订单状态是否是发布状态 若订单处于发布中便可以抢单 设定时间与租户ID以及订单状态 null表示失败 成功则返回订单信息
+     */
+      @RequestMapping(value = "/grabOrder",method = RequestMethod.PATCH)  //抢车位
+      public @ResponseBody Order grabOrder(@RequestParam("orderId") long orderId, @RequestParam("tenantId") String tenantId){
+          Order order = orderRepository.findByOrderId(orderId);
+          if (1 != order.getOrderState())  //检查订单状态是否非发布中，若不是发布中则拒绝修改
+              return null;
+          order.setTenantId(tenantId);
+          order.setConfirmDate(new Date());
+          order.setOrderState(2);
+          return orderRepository.save(order);
+      }
 
-    @RequestMapping(value = "/abandonOrder",method = RequestMethod.POST)//租户放弃订单
-    public @ResponseBody boolean abandonOrder(@RequestParam("id") long id){
-        Order order = orderRepository.findById(id).get();
+    /**
+     * 放弃车位
+     * @param orderId 待放弃的订单ID
+     * @return 检查订单状态，如果已经处于订单车位时间内，则放弃失败返回false，否则设置ID和时间为空，返回true
+     */
+    @RequestMapping(value = "/abandonOrder",method = RequestMethod.PATCH)//租户放弃车位
+    public @ResponseBody boolean abandonOrder(@RequestParam("orderId") long orderId){
+        Order order = orderRepository.findByOrderId(orderId);
         if (2 != order.getOrderState())//检查订单状态是否非租借中，若不是租借中则拒绝修改
             return false;
         order.setTenantId(null);
@@ -94,25 +103,28 @@ public class OrderController {
         return true;
     }
 
-//    @RequestMapping(value = "/checkOrder",method = RequestMethod.POST)//检查订单是否过期，每日更新
-//    public @ResponseBody boolean CheckOrderIsExpire(){ //检查系统内订单是否结束
-//        Date now = new Date();         //当前时间
-//        Date orderDate = new Date();   //订单时间
-//        Iterator OrderIterator = orderRepository.findAll().iterator();
-//        while(OrderIterator.hasNext()) {
-//            Order order = (Order) OrderIterator.next();
-//            try {
-//                orderDate = sf.parse(order.getOrderDate());
-//            } catch (ParseException e) {
-//                e.printStackTrace();
-//            }
-//            if(orderDate.compareTo(now) > 0 ){
-//                if(null == order.getTenantId()){
-//                    order.setOrderState(0);
-//                }else
-//                    order.setOrderState(3);
-//            }
-//        }
-//        return true;
-//    }
+    //TODO 后面需要继续增强，比如返回具体的消息格式
+    /**
+     * 检查订单
+     */
+      @RequestMapping(value = "/orderfresh",method = RequestMethod.PUT)  //检查订单是否过期，每日更新
+      public @ResponseBody void CheckOrderIsExpire(){   //检查系统内订单是否结束
+          Date now = new Date();           //当前时间
+          Date orderDate;                  //订单时间
+          Iterator OrderIterator = orderRepository.findAll().iterator();
+          while(OrderIterator.hasNext()) {
+              Order order = (Order) OrderIterator.next();
+              orderDate = order.getOrderDate();
+              if(orderDate.compareTo(now) > 0 ){
+                  if(null == order.getTenantId()){
+                      order.setOrderState(0);   //订单时间大于当前时间，若租户ID为null，则标识过期
+                  }else
+                      order.setOrderState(3);   //订单时间大于当前时间，若租户ID不为null,则标识完成
+              }
+              else if(orderDate.compareTo(now) == 0 && null != order.getTenantId()){
+                  order.setOrderState(2);       //订单时间等于当前时间，若租户ID不为null，则标识订单租借中
+              }
+              orderRepository.save(order);
+          }
+      }
 }

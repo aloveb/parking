@@ -7,7 +7,7 @@ import javax.persistence.*;
 @Table( name="P_user" )
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;   //用户ID
 
     private String openId; //微信用户OpenID
