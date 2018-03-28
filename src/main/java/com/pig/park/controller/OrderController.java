@@ -105,6 +105,7 @@ public class OrderController {
             return false;
         order.setTenantId(null);
         order.setConfirmDate(null);
+        order.setOrderState(1);
         return true;
     }
 
