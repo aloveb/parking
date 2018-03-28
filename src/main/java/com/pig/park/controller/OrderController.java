@@ -5,9 +5,7 @@ import com.pig.park.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping("/order")
@@ -22,8 +20,15 @@ public class OrderController {
      * @return 所有满足条件的订单
      */
     @RequestMapping(value = "/getOrderList",method = RequestMethod.GET)//根据用户ID查询用户的订单
-    public @ResponseBody List<Order> getOrderList(@RequestParam("id") String uid) {
-        return orderRepository.findAllByRentIdOrTenantId(uid, uid);
+    public @ResponseBody List<Order> getOrderList(@RequestParam("id") Long uid) {
+        List<Order> orderList = orderRepository.findAllByRentIdOrTenantId(uid, uid);
+        Collections.sort(orderList, new Comparator<Order>(){
+            @Override
+            public int compare(Order o1, Order o2) {
+                return o2.getOrderDate().compareTo(o1.getOrderDate());
+            }
+        });
+        return orderList;
     }
 
     /**
@@ -62,7 +67,7 @@ public class OrderController {
      * @return 检查订单状态 若订单处于发布中便可以取消 true修改成功 false表示修改失败
      */
     @RequestMapping(value = "/cancelOrder",method = RequestMethod.PATCH)//取消订单
-    public @ResponseBody Order deleteOrderById(@RequestParam("orderId") long orderId){
+    public @ResponseBody Order deleteOrderById(@RequestParam("orderId") Long orderId){
         Order order = orderRepository.findByOrderId(orderId);
         if(1 != order.getOrderState()){//检查订单状态是否非发布中，若不是发布中则拒绝修改
             return null;
@@ -78,7 +83,7 @@ public class OrderController {
      * @return 检查订单状态是否是发布状态 若订单处于发布中便可以抢单 设定时间与租户ID以及订单状态 null表示失败 成功则返回订单信息
      */
       @RequestMapping(value = "/grabOrder",method = RequestMethod.PATCH)  //抢车位
-      public @ResponseBody Order grabOrder(@RequestParam("orderId") long orderId, @RequestParam("tenantId") String tenantId){
+      public @ResponseBody Order grabOrder(@RequestParam("orderId") Long orderId, @RequestParam("tenantId") Long tenantId){
           Order order = orderRepository.findByOrderId(orderId);
           if (1 != order.getOrderState())  //检查订单状态是否非发布中，若不是发布中则拒绝修改
               return null;
@@ -94,7 +99,7 @@ public class OrderController {
      * @return 检查订单状态，如果已经处于订单车位时间内，则放弃失败返回false，否则设置ID和时间为空，返回true
      */
     @RequestMapping(value = "/abandonOrder",method = RequestMethod.PATCH)//租户放弃车位
-    public @ResponseBody boolean abandonOrder(@RequestParam("orderId") long orderId){
+    public @ResponseBody boolean abandonOrder(@RequestParam("orderId") Long orderId){
         Order order = orderRepository.findByOrderId(orderId);
         if (2 != order.getOrderState())//检查订单状态是否非租借中，若不是租借中则拒绝修改
             return false;
@@ -104,6 +109,13 @@ public class OrderController {
     }
 
     //TODO 后面需要继续增强，比如返回具体的消息格式
+    /** for test
+     */
+    @RequestMapping(value = "/delete",method = RequestMethod.DELETE)//获取用户账户内的猪猪币余额
+    public @ResponseBody void delete(@RequestParam("id")Long orderId){
+        orderRepository.deleteByOrderId(orderId);
+    }
+
     /**
      * 检查订单
      */

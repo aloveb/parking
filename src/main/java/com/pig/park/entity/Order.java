@@ -15,9 +15,9 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderId;     //订单ID
 
-    private String rentId;    //租主ID
+    private Long rentId;    //租主ID
 
-    private String tenantId;  //租户ID
+    private Long tenantId;  //租户ID
 
     private String parkArea;  //停车位区域
 
@@ -75,19 +75,19 @@ public class Order {
         this.orderState = orderState;
     }
 
-    public String getRentId() {
+    public Long getRentId() {
         return rentId;
     }
 
-    public void setRentId(String rentId) {
+    public void setRentId(Long rentId) {
         this.rentId = rentId;
     }
 
-    public String getTenantId() {
+    public Long getTenantId() {
         return tenantId;
     }
 
-    public void setTenantId(String tenantId) {
+    public void setTenantId(Long tenantId) {
         this.tenantId = tenantId;
     }
 

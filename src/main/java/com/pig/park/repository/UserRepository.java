@@ -13,6 +13,7 @@ import java.util.Optional;
 @RepositoryRestResource(collectionResourceRel = "user", path = "user")
 public interface UserRepository extends PagingAndSortingRepository<User, Long> {
     List<User> findAll();  //获取用户LIST
-    User findByid(long id);
+    void deleteByid(Long id); //方便测试时删除数据
+    User findByid(Long id);
     User findByOpenId(String openId);  //通过openid查找用户
 }

@@ -41,13 +41,13 @@ public class UserController {
      * @return 用户如果存在则是钱币，不存在则返回-1
      */
     @RequestMapping(value = "/purse",method = RequestMethod.GET)//获取用户账户内的猪猪币余额
-    public @ResponseBody int myPurse(@RequestParam("id")long id){
+    public @ResponseBody int myPurse(@RequestParam("id")Long id){
         User user = userRepository.findByid(id);
         return user == null ? -1 : user.getPurse();
     }
 
     /**
-     * 更新订单
+     * 更新用户
      * @param user 需要更新用户的信息
      * @return 修改后返回修改后的user信息
      */
@@ -58,5 +58,12 @@ public class UserController {
         newuser.setCardId(user.getCardId());
         newuser.setPlateNum(user.getPlateNum());
         return userRepository.save(newuser);
+    }
+
+    /** for test
+     */
+    @RequestMapping(value = "/delete",method = RequestMethod.DELETE)//获取用户账户内的猪猪币余额
+    public @ResponseBody void delete(@RequestParam("id")Long id){
+        userRepository.deleteByid(id);
     }
 }
