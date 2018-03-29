@@ -42,7 +42,7 @@ public class OrderController {
      * @param rentId 本人ID，不查看本人发布的订单，因为自己不能抢自己的订单
      * @return 检查订单状态，如果已经处于订单车位时间内，则放弃失败返回false，否则设置ID和时间为空，返回true
      */
-    @RequestMapping(value = "/findAvailableOrder",method = RequestMethod.GET)//租户放弃车位
+    @RequestMapping(value = "/findAvailableOrder",method = RequestMethod.GET)//查看目前可用车位
     public @ResponseBody List<Order> findAvailableOrder(@RequestParam("rentId") Long rentId){
         List<Order> orderList = orderRepository.findAllByOrderStateAndRentIdNot(1,rentId);
         return orderList;
@@ -67,13 +67,9 @@ public class OrderController {
      */
     @RequestMapping(value = "/edit",method = RequestMethod.PUT)//修改订单
     public @ResponseBody Order editOrder(@RequestBody Order order) {
-        if(order.getOrderId() == null) {
-            return null;
-        }
         if(1 != (orderRepository.findById(order.getOrderId()).get().getOrderState())){ //检查订单状态是否非发布中，若不是发布中则拒绝修改
             return null;
         }
-
         return orderRepository.save(order);
     }
 
@@ -83,7 +79,7 @@ public class OrderController {
      * @param orderId 待取消的订单ID
      * @return 检查订单状态 若订单处于发布中便可以取消 true修改成功 false表示修改失败
      */
-    @RequestMapping(value = "/cancelOrder",method = RequestMethod.PUT)//取消订单
+    @RequestMapping(value = "/cancelOrder",method = RequestMethod.PUT)//租主取消订单
     public @ResponseBody Order deleteOrderById(@RequestParam("orderId") Long orderId){
         Order order = orderRepository.findByOrderId(orderId);
         if(1 != order.getOrderState()){//检查订单状态是否非发布中，若不是发布中则拒绝修改
@@ -134,6 +130,33 @@ public class OrderController {
     }
 
     //TODO 后面需要继续增强，比如返回具体的消息格式
+
+    /**
+     * 锁上订单
+     * @param orderId 待锁订单ID
+     * @return 检查订单是否上锁，如果已经上锁，则放弃失败返回false，否则锁上订单，返回true
+     */
+    @RequestMapping(value = "/lock",method = RequestMethod.PUT)//订单上锁
+    public boolean Lock(Long orderId){
+        Order order = orderRepository.findById(orderId).get();
+        if(1 ==order.getOrderLock())
+            return false;
+        order.setOrderLock(1);
+        orderRepository.save(order);
+        return true;
+    }
+
+    /**
+     * 解锁订单
+     * @param orderId 待解锁订单ID
+     */
+    @RequestMapping(value = "/unlock",method = RequestMethod.PUT)//订单解锁
+    public void UnLock(Long orderId){
+        Order order = orderRepository.findById(orderId).get();
+        order.setOrderLock(0);
+        orderRepository.save(order);
+    }
+
     /** for test
      */
     @RequestMapping(value = "/delete",method = RequestMethod.DELETE)//获取用户账户内的猪猪币余额

@@ -35,6 +35,8 @@ public class Order {
 
     private int orderState; //0,1,2,3分别为过期，发布中，租借中，完成
 
+    private int orderLock=0; //初始锁为0，锁起为1
+
     public String getParkArea() {
         return parkArea;
     }
@@ -122,4 +124,13 @@ public class Order {
     public void setOrderDate(Date orderDate) {
         this.orderDate = orderDate;
     }
+
+    public int getOrderLock() {
+        return orderLock;
+    }
+
+    public void setOrderLock(int orderLock) {
+        this.orderLock = orderLock;
+    }
+
 }
