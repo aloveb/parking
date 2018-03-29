@@ -12,7 +12,7 @@ import java.util.List;
 @RepositoryRestResource(collectionResourceRel = "order", path = "order")
 public interface OrderRepository extends PagingAndSortingRepository<Order, Long> {
     List<Order> findAllByRentIdOrTenantId(Long rentId, Long tenantId); //通过租户订单或者用户订单查询订单
-    List<Order> findAllByOrderState(int orderState); //查找订单根据状态
+    List<Order> findAllByOrderStateAndRentIdNot(int orderState,long RentId); //根据状态和租户ID查找合理订单
     Order findByOrderId(Long orderId);
     void deleteByOrderId(Long orderId);             //方便测试时删除数据
 }

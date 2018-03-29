@@ -3,11 +3,13 @@ package com.pig.park.controller;
 import com.pig.park.entity.User;
 import com.pig.park.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 
 @RestController
 @RequestMapping("/user")
+@Transactional
 public class UserController {
 
     @Autowired

@@ -1,18 +1,24 @@
 package com.pig.park.controller;
 
 import com.pig.park.entity.Order;
+import com.pig.park.entity.User;
 import com.pig.park.repository.OrderRepository;
+import com.pig.park.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
 @RestController
 @RequestMapping("/order")
+@Transactional
 public class OrderController {
 
     @Autowired
     private OrderRepository orderRepository;
+    @Autowired
+    private UserRepository userRepository ;
 
     /**
      * 根据用户的ID查询自己的订单，包含租出或者租入
@@ -28,6 +34,17 @@ public class OrderController {
                 return o2.getOrderDate().compareTo(o1.getOrderDate());
             }
         });
+        return orderList;
+    }
+
+    /**
+     * 查看目前可用车位（我要车位）
+     * @param rentId 本人ID，不查看本人发布的订单，因为自己不能抢自己的订单
+     * @return 检查订单状态，如果已经处于订单车位时间内，则放弃失败返回false，否则设置ID和时间为空，返回true
+     */
+    @RequestMapping(value = "/findAvailableOrder",method = RequestMethod.GET)//租户放弃车位
+    public @ResponseBody List<Order> findAvailableOrder(@RequestParam("rentId") Long rentId){
+        List<Order> orderList = orderRepository.findAllByOrderStateAndRentIdNot(1,rentId);
         return orderList;
     }
 
@@ -87,6 +104,13 @@ public class OrderController {
           Order order = orderRepository.findByOrderId(orderId);
           if (1 != order.getOrderState())  //检查订单状态是否非发布中，若不是发布中则拒绝修改
               return null;
+          if (tenantId == order.getRentId()){
+              return null;                //车主不能自己抢自己的订单
+          }
+          if (userRepository.findByid(tenantId).getPurse() < 0)
+          {
+              return null;                //余额不足，无法抢单
+          }
           order.setTenantId(tenantId);
           order.setConfirmDate(new Date());
           order.setOrderState(2);
@@ -124,6 +148,8 @@ public class OrderController {
       public @ResponseBody void CheckOrderIsExpire(){   //检查系统内订单是否结束
           Date now = new Date();           //当前时间
           Date orderDate;                  //订单时间
+          int price;                       //订单价格
+          User rent,tenant;                //租主和租户
           Iterator OrderIterator = orderRepository.findAll().iterator();
           while(OrderIterator.hasNext()) {
               Order order = (Order) OrderIterator.next();
@@ -138,6 +164,15 @@ public class OrderController {
                   order.setOrderState(2);       //订单时间等于当前时间，若租户ID不为null，则标识订单租借中
               }
               orderRepository.save(order);
+              price = order.getPrice();
+              if(0 != price) {
+                  rent = userRepository.findByid(order.getRentId());
+                  tenant = userRepository.findByid(order.getTenantId());
+                  rent.setPurse(rent.getPurse() + price);
+                  tenant.setPurse((rent.getPurse() - price));
+                  userRepository.save(rent);
+                  userRepository.save(tenant);
+              }
           }
       }
 }
