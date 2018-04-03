@@ -1,6 +1,8 @@
 package com.pig.park.entity;
 
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -10,7 +12,6 @@ import java.util.Date;
 @Entity
 @Table( name="P_order" )
 public class Order {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderId;     //订单ID
@@ -33,9 +34,9 @@ public class Order {
 
     private Date orderDate;  //车位使用的日期
 
-    private int orderState; //0,1,2,3分别为过期，发布中，租借中，完成
+    private int orderState; //0,1,2 分别为失效，发布中，完成
 
-    private int orderLock=0; //初始锁为0，锁起为1
+    private int orderLock = 0; //初始锁为0，锁起为1
 
     public String getParkArea() {
         return parkArea;
