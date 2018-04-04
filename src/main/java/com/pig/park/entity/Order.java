@@ -1,10 +1,5 @@
 package com.pig.park.entity;
 
-
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import org.springframework.format.annotation.DateTimeFormat;
-
 import javax.persistence.*;
 import java.util.Date;
 
@@ -37,6 +32,16 @@ public class Order {
     private int orderState; //0,1,2 分别为失效，发布中，完成
 
     private int orderLock = 0; //初始锁为0，锁起为1
+
+    public int getIsNotified() {
+        return isNotified;
+    }
+
+    public void setIsNotified(int isNotified) {
+        this.isNotified = isNotified;
+    }
+
+    private int isNotified;   //是否通知 1为已通知,2为未通知
 
     public String getParkArea() {
         return parkArea;

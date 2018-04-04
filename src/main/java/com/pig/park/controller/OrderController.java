@@ -137,8 +137,33 @@ public class OrderController {
           order.setTenantId(tenantId);
           order.setConfirmDate(new Date());
           order.setOrderState(2);
+          order.setIsNotified(0);
           return orderRepository.save(order);
       }
+
+
+    /**
+     * 消息提醒
+     * @param uid 用户ID
+     * @return true 有新消息, false 没有新消息
+     */
+    @RequestMapping(value = "/notification",method = RequestMethod.GET)//订单上锁
+    public List<Order> notify(@RequestParam("id") Long uid){
+        List<Order> notifyList = orderRepository.findAllByRentIdOrTenantIdOrderByOrderDateDesc(uid,uid);
+        Iterator OrderIterator = notifyList.iterator();
+        int flag = 0;
+        while(OrderIterator.hasNext()) {
+            Order order = (Order) OrderIterator.next();
+            if (0 == order.getIsNotified()) {
+                order.setIsNotified(1);
+                orderRepository.save(order);
+                flag++;
+            }
+        }
+        if(0 != flag)
+            return notifyList;
+        return null;
+    }
 
     //TODO 后面需要继续增强，比如返回具体的消息格式
 
