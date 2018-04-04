@@ -27,15 +27,9 @@ public class OrderController {
      */
     @RequestMapping(value = "/getOrderList",method = RequestMethod.GET)//根据用户ID查询用户的订单
     public @ResponseBody List<Order> getOrderList(@RequestParam("id") Long uid) {
-        List<Order> orderList = orderRepository.findAllByRentIdOrTenantId(uid, uid);
+        List<Order> orderList = orderRepository.findAllByRentIdOrTenantIdOrderByOrderDateDesc(uid, uid);
         Date now = new Date();           //当前时间
-        Date orderDate;                  //订单时间
-        Collections.sort(orderList, new Comparator<Order>(){
-            @Override
-            public int compare(Order o1, Order o2) {
-                return o2.getOrderDate().compareTo(o1.getOrderDate());
-            }
-        });
+        Date orderDate;                  //订单时间\
         Iterator OrderIterator = orderList.iterator();
         while(OrderIterator.hasNext()) {
             Order order = (Order) OrderIterator.next();
@@ -55,7 +49,7 @@ public class OrderController {
      */
     @RequestMapping(value = "/findAvailableOrder",method = RequestMethod.GET)//查看目前可用车位
     public @ResponseBody List<Order> findAvailableOrder(@RequestParam("rentId") Long rentId){
-        List<Order> orderList = orderRepository.findAllByOrderStateAndRentIdNot(1,rentId);
+        List<Order> orderList = orderRepository.findAllByOrderStateAndRentIdNotOrderByOrderDateAsc(1,rentId);
         Date now = new Date();           //当前时间
         Date orderDate;                  //订单时间
         Iterator OrderIterator = orderList.iterator();
@@ -67,7 +61,7 @@ public class OrderController {
                 orderRepository.save(order);
             }
         }
-        List<Order> neworderList = orderRepository.findAllByOrderStateAndRentIdNot(1,rentId);
+        List<Order> neworderList = orderRepository.findAllByOrderStateAndRentIdNotOrderByOrderDateAsc(1,rentId);
         return neworderList;
     }
 
