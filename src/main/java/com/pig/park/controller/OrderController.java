@@ -122,20 +122,24 @@ public class OrderController {
       @RequestMapping(value = "/grabOrder",method = RequestMethod.PUT)  //抢车位
       public @ResponseBody Order grabOrder(@RequestParam("orderId") Long orderId, @RequestParam("tenantId") Long tenantId){
           Order order = orderRepository.findByOrderId(orderId);
-          User user = userRepository.findByid(tenantId);
+          User tenant = userRepository.findByid(tenantId);
+          User rent = userRepository.findByid(order.getRentId());
           int price = order.getPrice();
-          int purse = user.getPurse();
+          int rentPurse = rent.getPurse();
+          int tenantPurse = tenant.getPurse();
           if (1 != order.getOrderState())  //检查订单状态是否非发布中，若不是发布中则拒绝修改
               return null;
           if (tenantId == order.getRentId()){
               return null;                //车主不能自己抢自己的订单
           }
-          if ( purse < price)
+          if ( tenantPurse < price)
           {
               return null;                //余额不足，无法抢单
           }
-          user.setPurse(purse-price);
-          userRepository.save(user);
+          tenant.setPurse(tenantPurse-price);
+          rent.setPurse(rentPurse+price);
+          userRepository.save(tenant);
+          userRepository.save(rent);
           order.setTenantId(tenantId);
           order.setConfirmDate(new Date());
           order.setOrderState(2);
